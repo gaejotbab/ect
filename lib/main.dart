@@ -81,7 +81,23 @@ class HomeScreenWidget extends StatefulWidget {
 
 enum TestEnum { a, b }
 
+class Goal {
+  final String name;
+  int _elapsedMilliseconds;
+
+  Goal(this.name) {
+  }
+}
+
 class _HomeScreenWidgetState extends State<HomeScreenWidget> {
+  List<Goal> _goals = [
+    Goal("국어"),
+    Goal("영어"),
+    Goal("수학"),
+    Goal("플러터"),
+    Goal("C 언어로 웹서버 만들기"),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -110,33 +126,28 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
         ),
         Expanded(
-          child: ListView(
-            children: <Widget>[
-              Builder(
-                builder: (context) =>
-                  DefaultTextStyle(
-                    style: DefaultTextStyle.of(context)
-                        .style.apply(fontSizeFactor: 1.5),
-                    child: Container(
+          child: Builder(
+            builder: (context) =>
+              DefaultTextStyle(
+                style: DefaultTextStyle.of(context)
+                    .style.apply(fontSizeFactor: 1.5),
+                child: ListView.builder(
+                  itemCount: _goals.length,
+                  itemBuilder: (context, i) =>
+                    Container(
                       height: 50,
                       child: Row(
                         children: <Widget>[
                           SizedBox(width: 20),
+                          Icon(Icons.play_circle_filled),
+                          SizedBox(width: 10),
                           Expanded(
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.play_circle_filled),
-                                SizedBox(width: 10),
-                                Text("영어"),
-                              ],
+                            child: Text(_goals[i].name,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           SizedBox(width: 20),
-                          Row(
-                            children: <Widget>[
-                              Text("00:00:00"),
-                            ],
-                          ),
+                          Text("00:00:00"),
                           SizedBox(width: 10),
                           PopupMenuButton<TestEnum>(
                             itemBuilder: (context) => [
@@ -153,9 +164,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                         ],
                       ),
                     ),
-                  )
+                )
               ),
-            ],
           ),
         ),
       ],
