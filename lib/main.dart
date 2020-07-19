@@ -79,6 +79,8 @@ class HomeScreenWidget extends StatefulWidget {
   _HomeScreenWidgetState createState() => _HomeScreenWidgetState();
 }
 
+enum TestEnum { a, b }
+
 class _HomeScreenWidgetState extends State<HomeScreenWidget> {
   @override
   Widget build(BuildContext context) {
@@ -100,7 +102,62 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
           ),
         ),
-        SizedBox(height: 15),
+        Row(
+          children: <Widget>[
+            Text("목표/과목"),
+            Text("공부시간"),
+          ],
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        ),
+        Expanded(
+          child: ListView(
+            children: <Widget>[
+              Builder(
+                builder: (context) =>
+                  DefaultTextStyle(
+                    style: DefaultTextStyle.of(context)
+                        .style.apply(fontSizeFactor: 1.5),
+                    child: Container(
+                      height: 50,
+                      child: Row(
+                        children: <Widget>[
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(Icons.play_circle_filled),
+                                SizedBox(width: 10),
+                                Text("영어"),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Row(
+                            children: <Widget>[
+                              Text("00:00:00"),
+                            ],
+                          ),
+                          SizedBox(width: 10),
+                          PopupMenuButton<TestEnum>(
+                            itemBuilder: (context) => [
+                              PopupMenuItem<TestEnum>(
+                                value: TestEnum.a,
+                                child: Text("a랜다"),
+                              ),
+                              PopupMenuItem<TestEnum>(
+                                value: TestEnum.b,
+                                child: Text("b라더라"),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
