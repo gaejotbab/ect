@@ -9,7 +9,7 @@ class EnergyChargedTimerApp extends StatelessWidget {
     return MaterialApp(
       title: 'Energy Charged Timer',
       theme: ThemeData(
-        primarySwatch: Colors.orangeAccent.shade50,
+        primaryColor: Colors.deepOrange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomePageWidget(),
@@ -48,7 +48,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_appBarTitleTexts[_selectedIndex]),
-        backgroundColor: Colors.orangeAccent,
       ),
       body: _screenWidgets[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -103,19 +102,22 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
     return Column(
       children: <Widget>[
         Container(
-          color: Colors.orangeAccent,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              SizedBox(height: 25),
-              Text("2020. 7. 19.", textAlign: TextAlign.center,),
-              SizedBox(height: 15),
-              Text("00:00:00", textAlign: TextAlign.center, textScaleFactor: 4),
-              SizedBox(height: 15),
-              Icon(Icons.timer_off),
-              SizedBox(height: 25),
-            ],
-            mainAxisAlignment: MainAxisAlignment.center,
+          color: Theme.of(context).primaryColor,
+          child: DefaultTextStyle(
+            style: DefaultTextStyle.of(context).style.apply(color: Colors.white),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                SizedBox(height: 25),
+                Text("2020. 7. 19.", textAlign: TextAlign.center,),
+                SizedBox(height: 15),
+                Text("00:00:00", textAlign: TextAlign.center, textScaleFactor: 4),
+                SizedBox(height: 15),
+                Icon(Icons.timer_off, color: Colors.white),
+                SizedBox(height: 25),
+              ],
+              mainAxisAlignment: MainAxisAlignment.center,
+            ),
           ),
         ),
         Row(
