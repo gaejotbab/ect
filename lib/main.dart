@@ -205,10 +205,118 @@ class PlannerScreenWidget extends StatefulWidget {
 class _PlannerScreenWidgetState extends State<PlannerScreenWidget> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text("플래너"),
-      ),
+    return Column(
+      children: <Widget>[
+        Container(
+          color: Theme.of(context).primaryColor,
+          child: DefaultTextStyle(
+            style: DefaultTextStyle.of(context).style.apply(color: Colors.white),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Text("00:00:00"),
+                Row(
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.arrow_left),
+                      color: Colors.white,
+                      onPressed: () {
+                        Scaffold.of(context).showSnackBar(
+                          SnackBar(content: Text("어제로 가기 버튼 누름"))
+                        );
+                      },
+                    ),
+                    Text("2020. 7. 23."),
+                    IconButton(
+                      icon: Icon(Icons.arrow_right),
+                      color: Colors.white,
+                      onPressed: () {
+                        Scaffold.of(context).showSnackBar(
+                            SnackBar(content: Text("내일로 가기 버튼 누름"))
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            color: Colors.black12,
+            child: Table(
+              children: [
+                TableRow(
+                  children: [
+                    TableCell(
+                      verticalAlignment: TableCellVerticalAlignment.fill,
+                      child: Container(
+                        color: Colors.white,
+                        child: FlatButton(
+                          child: Text("오늘의 한마디"),
+                          onPressed: () {
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(content: Text("오늘의 한 마디 누름"))
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    Container(
+                      color: Colors.white,
+                      child: Column(
+                        children: <Widget>[
+                          FlatButton(
+                            child: Text("D-Day"),
+                            onPressed: () {
+                              Scaffold.of(context).showSnackBar(
+                                SnackBar(content: Text("D-Day 누름"))
+                              );
+                            },
+                          ),
+                          Row(
+                            children: <Widget>[
+                              SizedBox(width: 4),
+                              Expanded(
+                                child: SizedBox(
+                                  height: 16,
+                                  child: LinearProgressIndicator(
+                                    value: 0.3,
+                                    backgroundColor: Colors.black12,
+                                    valueColor: AlwaysStoppedAnimation(Colors.black54),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 4),
+                              Text("0.0"),
+                              SizedBox(width: 4),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    SizedBox(
+                      child: Container(
+                          color: Colors.white,
+                          child: Text("과목 목록")
+                      ),
+                    ),
+                    Container(
+                        color: Colors.white,
+                        child: Text("시간표")
+                    ),
+                  ],
+                ),
+              ]
+            ),
+          ),
+        )
+      ]
     );
   }
 }
