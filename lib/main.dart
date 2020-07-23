@@ -140,9 +140,15 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                       height: 50,
                       child: Row(
                         children: <Widget>[
-                          SizedBox(width: 20),
-                          Icon(Icons.play_circle_filled),
-                          SizedBox(width: 10),
+                          IconButton(
+                            icon: Icon(Icons.play_circle_filled),
+                            iconSize: 36,
+                            onPressed: () {
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text("버튼 누름"),
+                              ));
+                            },
+                          ),
                           Expanded(
                             child: Text(_goals[i].name,
                               overflow: TextOverflow.ellipsis,
