@@ -9,12 +9,10 @@ import 'planner.dart';
 import 'state.dart';
 import 'statistics.dart';
 
-void main() => runApp(
-    ChangeNotifierProvider(
+void main() => runApp(ChangeNotifierProvider(
       create: (context) => AppState(),
       child: EnergyChargedTimerApp(),
-    )
-);
+    ));
 
 class EnergyChargedTimerApp extends StatelessWidget {
   @override
@@ -94,16 +92,6 @@ class HomeScreenWidget extends StatefulWidget {
 enum TestEnum { a, b }
 
 class _HomeScreenWidgetState extends State<HomeScreenWidget> {
-  Timer _timer;
-
-  _HomeScreenWidgetState() {
-    _timer = new Timer.periodic(new Duration(milliseconds: 10), _onTimer);
-  }
-
-  void _onTimer(Timer timer) {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -111,14 +99,19 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
         Container(
           color: Theme.of(context).primaryColor,
           child: DefaultTextStyle(
-            style: DefaultTextStyle.of(context).style.apply(color: Colors.white),
+            style:
+                DefaultTextStyle.of(context).style.apply(color: Colors.white),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 SizedBox(height: 25),
-                Text("2020. 7. 19.", textAlign: TextAlign.center,),
+                Text(
+                  "2020. 7. 19.",
+                  textAlign: TextAlign.center,
+                ),
                 SizedBox(height: 15),
-                Text("00:00:00", textAlign: TextAlign.center, textScaleFactor: 4),
+                Text("00:00:00",
+                    textAlign: TextAlign.center, textScaleFactor: 4),
                 SizedBox(height: 15),
                 Icon(Icons.timer_off, color: Colors.white),
                 SizedBox(height: 25),
@@ -136,61 +129,57 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
         ),
         Expanded(
           child: Builder(
-            builder: (context) =>
-              DefaultTextStyle(
+            builder: (context) => DefaultTextStyle(
                 style: DefaultTextStyle.of(context)
-                    .style.apply(fontSizeFactor: 1.5),
+                    .style
+                    .apply(fontSizeFactor: 1.5),
                 child: Consumer<AppState>(
                   builder: (context, state, child) => ListView.builder(
-                    itemCount: state.goals.length,
-                    itemBuilder: (context, i) {
-                      var goal = state.goals[i];
-                      return Container(
-                        height: 50,
-                        child: Row(
-                          children: <Widget>[
-                            IconButton(
-                              color: goal.color,
-                              icon: Icon(Icons.play_circle_filled),
-                              iconSize: 36,
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) =>
-                                        GoalTimerScreen()
-                                    )
-                                );
-                              },
-                            ),
-                            Expanded(
-                              child: Text(goal.name,
-                                overflow: TextOverflow.ellipsis,
+                      itemCount: state.goals.length,
+                      itemBuilder: (context, i) {
+                        var goal = state.goals[i];
+                        return Container(
+                          height: 50,
+                          child: Row(
+                            children: <Widget>[
+                              IconButton(
+                                color: goal.color,
+                                icon: Icon(Icons.play_circle_filled),
+                                iconSize: 36,
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              GoalTimerScreen(goal)));
+                                },
                               ),
-                            ),
-                            SizedBox(width: 20),
-                            Text("${goal.stopwatch.elapsed
-                                .inSeconds}"),
-                            SizedBox(width: 10),
-                            PopupMenuButton<TestEnum>(
-                              itemBuilder: (context) =>
-                              [
-                                PopupMenuItem<TestEnum>(
-                                  value: TestEnum.a,
-                                  child: Text("a랜다"),
+                              Expanded(
+                                child: Text(
+                                  goal.name,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                PopupMenuItem<TestEnum>(
-                                  value: TestEnum.b,
-                                  child: Text("b라더라"),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  ),
-                )
-              ),
+                              ),
+                              SizedBox(width: 20),
+                              Text("${goal.stopwatch.elapsed.inSeconds}"),
+                              SizedBox(width: 10),
+                              PopupMenuButton<TestEnum>(
+                                itemBuilder: (context) => [
+                                  PopupMenuItem<TestEnum>(
+                                    value: TestEnum.a,
+                                    child: Text("a랜다"),
+                                  ),
+                                  PopupMenuItem<TestEnum>(
+                                    value: TestEnum.b,
+                                    child: Text("b라더라"),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                )),
           ),
         ),
       ],
@@ -199,6 +188,10 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
 }
 
 class GoalTimerScreen extends StatefulWidget {
+  final Goal goal;
+
+  GoalTimerScreen(this.goal);
+
   @override
   _GoalTimerScreenState createState() => _GoalTimerScreenState();
 }
@@ -211,7 +204,8 @@ class _GoalTimerScreenState extends State<GoalTimerScreen> {
         color: Colors.black,
         child: Builder(
           builder: (context) => DefaultTextStyle(
-            style: DefaultTextStyle.of(context).style.apply(color: Colors.white),
+            style:
+                DefaultTextStyle.of(context).style.apply(color: Colors.white),
             child: Column(
               children: <Widget>[
                 SizedBox(height: 72),
@@ -238,7 +232,7 @@ class _GoalTimerScreenState extends State<GoalTimerScreen> {
                     Expanded(
                       child: Column(
                         children: [
-                          Text("국어"),
+                          Text(widget.goal.name),
                           SizedBox(height: 4),
                           Text("00:00:00", textScaleFactor: 1.5),
                         ],
