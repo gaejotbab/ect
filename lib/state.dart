@@ -4,10 +4,57 @@ import 'package:flutter/widgets.dart';
 class Goal {
   final String name;
   final Color color;
+
+  Map<LocalDate, DailyGoalRecord> dailyGoalRecords;
+
   Stopwatch stopwatch = Stopwatch();
 
-  Goal(this.name, this.color) {
+  Goal(this.name, this.color);
+}
+
+class LocalDate implements Comparable {
+  final int year;
+  final int month;
+  final int day;
+
+  LocalDate(this.year, this.month, this.day);
+
+  static LocalDate today() {
+    var now = DateTime.now();
+    return LocalDate(now.year, now.month, now.day);
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LocalDate &&
+          runtimeType == other.runtimeType &&
+          year == other.year &&
+          month == other.month &&
+          day == other.day;
+
+  @override
+  int get hashCode => year.hashCode ^ month.hashCode ^ day.hashCode;
+
+  @override
+  int compareTo(other) {
+    var yearComparison = this.year.compareTo(other.year);
+    if (yearComparison != 0) {
+      return yearComparison;
+    }
+
+    var monthComparison = this.month.compareTo(other.month);
+    if (monthComparison != 0) {
+      return monthComparison;
+    }
+
+    return this.day.compareTo(other.day);
+  }
+}
+
+class DailyGoalRecord {
+  Map<int, int> achievements;
+  int totalTime;
 }
 
 class AppState extends ChangeNotifier {
@@ -18,5 +65,5 @@ class AppState extends ChangeNotifier {
     Goal("개발", Colors.black26),
   ];
 
-  int totalElapsedTime = 0;
+  Map<LocalDate, int> dailyAllGoalsTime;
 }
