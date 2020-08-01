@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ect/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -197,6 +198,26 @@ class GoalTimerScreen extends StatefulWidget {
 }
 
 class _GoalTimerScreenState extends State<GoalTimerScreen> {
+  Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.goal.stopwatch.start();
+    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.goal.stopwatch.reset();
+    _timer.cancel();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -243,7 +264,10 @@ class _GoalTimerScreenState extends State<GoalTimerScreen> {
                         children: [
                           Text("현재 집중시간"),
                           SizedBox(height: 4),
-                          Text("00:00:00", textScaleFactor: 1.5),
+                          Text(
+                              formatMilliseconds(
+                                  widget.goal.stopwatch.elapsedMilliseconds),
+                              textScaleFactor: 1.5),
                         ],
                       ),
                     ),
