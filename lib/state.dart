@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -49,13 +51,27 @@ class Goal {
 
   Stopwatch stopwatch = Stopwatch();
 
-  Goal(this.name, this.color);
+  Goal(this.name, this.color) {
+    dailyGoalRecords = SplayTreeMap<LocalDate, DailyGoalRecord>();
+  }
+
+  DailyGoalRecord todayGoalRecord() {
+    var today = LocalDate.today();
+
+    var todayGoalRecord = dailyGoalRecords[today];
+    if (todayGoalRecord == null) {
+      todayGoalRecord = DailyGoalRecord();
+      dailyGoalRecords[today] = todayGoalRecord;
+    }
+
+    return todayGoalRecord;
+  }
 }
 
 class DailyGoalRecord {
   // Key: 시작 시각, Value: 수행 시간
-  Map<int, int> periods;
-  int totalTime;
+  Map<int, int> periods = SplayTreeMap<int, int>();
+  int totalTime = 0;
 }
 
 class AppState extends ChangeNotifier {
@@ -66,5 +82,17 @@ class AppState extends ChangeNotifier {
     Goal("개발", Colors.black26),
   ];
 
-  Map<LocalDate, int> dailyAllGoalsTotalTimes;
+  Map<LocalDate, int> dailyAllGoalsTotalTimes = SplayTreeMap<LocalDate, int>();
+
+  int todayAllGoalsTotalTimes() {
+    return dailyAllGoalsTotalTimes[LocalDate.today()] ?? 0;
+  }
+
+  void addToTodayAllGoalsTotalTimes(int timeMs) {
+    var today = LocalDate.today();
+
+    var dailyAllGoalsTotalTime = dailyAllGoalsTotalTimes[today] ?? 0;
+
+    dailyAllGoalsTotalTimes[today] = dailyAllGoalsTotalTime + timeMs;
+  }
 }

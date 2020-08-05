@@ -199,27 +199,41 @@ class GoalTimerScreen extends StatefulWidget {
 
 class _GoalTimerScreenState extends State<GoalTimerScreen> {
   Timer _timer;
+  int _startTime;
 
   @override
   void initState() {
     super.initState();
 
+    _startTime = DateTime.now().millisecondsSinceEpoch;
     widget.goal.stopwatch.start();
+
     _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
       setState(() {});
     });
   }
 
   @override
-  void dispose() {
-    widget.goal.stopwatch.reset();
+  void deactivate() {
     _timer.cancel();
+
+    widget.goal.stopwatch.stop();
+    var elapsedMilliseconds = widget.goal.stopwatch.elapsedMilliseconds;
+    widget.goal.stopwatch.reset();
+
+    widget.goal.todayGoalRecord().totalTime += elapsedMilliseconds;
+    widget.goal.todayGoalRecord().periods[_startTime] = elapsedMilliseconds;
+
+    var appState = Provider.of<AppState>(context);
+    appState.addToTodayAllGoalsTotalTimes(elapsedMilliseconds);
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    var goal = widget.goal;
+
     return Scaffold(
       body: Container(
         color: Colors.black,
@@ -235,7 +249,14 @@ class _GoalTimerScreenState extends State<GoalTimerScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text("00:00:00", textScaleFactor: 4),
+                    Consumer<AppState>(builder: (context, appState, child) =>
+                        Text(
+                            formatMilliseconds(
+                                appState.todayAllGoalsTotalTimes()
+                                    + goal.stopwatch.elapsedMilliseconds),
+                            textScaleFactor: 4,
+                        ),
+                    ),
                     SizedBox(width: 8),
                     IconButton(
                       icon: Icon(Icons.pause_circle_filled),
@@ -253,9 +274,13 @@ class _GoalTimerScreenState extends State<GoalTimerScreen> {
                     Expanded(
                       child: Column(
                         children: [
-                          Text(widget.goal.name),
+                          Text(goal.name),
                           SizedBox(height: 4),
-                          Text("00:00:00", textScaleFactor: 1.5),
+                          Text(formatMilliseconds(
+                              goal.todayGoalRecord().totalTime
+                                  + goal.stopwatch.elapsedMilliseconds),
+                              textScaleFactor: 1.5,
+                          ),
                         ],
                       ),
                     ),
@@ -266,7 +291,7 @@ class _GoalTimerScreenState extends State<GoalTimerScreen> {
                           SizedBox(height: 4),
                           Text(
                               formatMilliseconds(
-                                  widget.goal.stopwatch.elapsedMilliseconds),
+                                  goal.stopwatch.elapsedMilliseconds),
                               textScaleFactor: 1.5),
                         ],
                       ),
