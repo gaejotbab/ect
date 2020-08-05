@@ -1,17 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class Goal {
-  final String name;
-  final Color color;
-
-  Map<LocalDate, DailyGoalRecord> dailyGoalRecords;
-
-  Stopwatch stopwatch = Stopwatch();
-
-  Goal(this.name, this.color);
-}
-
 class LocalDate implements Comparable {
   final int year;
   final int month;
@@ -52,8 +41,20 @@ class LocalDate implements Comparable {
   }
 }
 
+class Goal {
+  final String name;
+  final Color color;
+
+  Map<LocalDate, DailyGoalRecord> dailyGoalRecords;
+
+  Stopwatch stopwatch = Stopwatch();
+
+  Goal(this.name, this.color);
+}
+
 class DailyGoalRecord {
-  Map<int, int> achievements;
+  // Key: 시작 시각, Value: 수행 시간
+  Map<int, int> periods;
   int totalTime;
 }
 
@@ -65,5 +66,5 @@ class AppState extends ChangeNotifier {
     Goal("개발", Colors.black26),
   ];
 
-  Map<LocalDate, int> dailyAllGoalsTime;
+  Map<LocalDate, int> dailyAllGoalsTotalTimes;
 }
